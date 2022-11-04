@@ -29,7 +29,7 @@ export const useSignup = () => {
       //upload user avatar(thumbnail)
       const uploadPath = `thumbnails/${res.user.uid}/${thumbnail.name}`;
       const image = await projectStorage.ref(uploadPath).put(thumbnail);
-      const imageUrl = await image.ref.getDownloadURL;
+      const imageUrl = await image.ref.getDownloadURL();
 
       // add display name and avatar to user
       await res.user.updateProfile({ displayName, photoURL: imageUrl });
