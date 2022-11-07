@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
-import { projectAuth, projectStorage } from "../firebase/config";
+import {
+  projectAuth,
+  projectStorage,
+  projectFirestore,
+} from "../firebase/config";
 import { useAuthContext } from "./useAuthContext";
 
 export const useSignup = () => {
@@ -24,7 +28,6 @@ export const useSignup = () => {
       }
 
       //create a folder for user by id, therefore here whereafter user is created
-
       //upload path as template string
       //upload user avatar(thumbnail)
       const uploadPath = `thumbnails/${res.user.uid}/${thumbnail.name}`;
@@ -33,6 +36,13 @@ export const useSignup = () => {
 
       // add display name and avatar to user
       await res.user.updateProfile({ displayName, photoURL: imageUrl });
+
+      //create user document (to firestore), to show a list of them on the webpage
+      await projectFirestore.collection("users").doc(res.user.uid).set({
+        online: true,
+        displayName,
+        photoURL: imageUrl,
+      });
 
       // dispatch login action
       dispatch({ type: "LOGIN", payload: res.user });
