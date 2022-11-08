@@ -20,6 +20,7 @@ const Create = () => {
   const [dueDate, setDueDate] = useState();
   const [category, setCategory] = useState();
   const [assignedUsers, setAssignedUsers] = useState([]);
+  const [formError, setFormError] = useState(null);
 
   //change the users to have the value and label to be shown in the form as select options
   useEffect(() => {
@@ -33,6 +34,17 @@ const Create = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setFormError(null);
+
+    if (!category) {
+      setFormError("Please select a project category");
+      return;
+    }
+    if (assignedUsers.length < 1) {
+      setFormError("Please assign the project to at least one user");
+      return;
+    }
+
     console.log(name, details, dueDate, category.value, assignedUsers);
   };
 
@@ -83,6 +95,7 @@ const Create = () => {
           />
         </label>
         <button className="btn">Add Project</button>
+        {formError && <p className="error">{formError}</p>}
       </form>
     </div>
   );
